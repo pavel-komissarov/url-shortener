@@ -1,0 +1,17 @@
+server:
+  http_port: ":8080"
+  grpc_port: ":50051"
+  timeout: "10s"
+  idle_timeout: "15s"
+
+storage:
+  type: "postgres" # memory, postgres
+  postgres:
+    host: "postgres"
+    port: 5432
+    user: "postgres"
+    password: "password"
+    dbname: "shortener"
+
+log:
+  level: "prod" # local, prod

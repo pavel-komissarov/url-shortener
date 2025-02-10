@@ -69,20 +69,20 @@ func runServers(httpServer *http.Server, grpcServer *grpc.Server, lis net.Listen
 	signal.Notify(stopChan, syscall.SIGINT, syscall.SIGTERM)
 
 	wg.Add(1)
-	go func() {
+	go func(errChan chan error) {
 		defer wg.Done()
 		if err := httpServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			errChan <- fmt.Errorf("HTTP server error: %w", err)
 		}
-	}()
+	}(errChan)
 
 	wg.Add(1)
-	go func() {
+	go func(errChan chan error) {
 		defer wg.Done()
 		if err := grpcServer.Serve(lis); err != nil && !errors.Is(err, grpc.ErrServerStopped) {
 			errChan <- fmt.Errorf("gRPC server error: %w", err)
 		}
-	}()
+	}(errChan)
 
 	select {
 	case <-stopChan:
@@ -103,20 +103,20 @@ func shutdownServers(httpServer *http.Server, grpcServer *grpc.Server, log *zap.
 	var wg sync.WaitGroup
 	wg.Add(ServersNumber)
 
-	go func() {
+	go func(httpServer *http.Server) {
 		defer wg.Done()
 		if err := httpServer.Shutdown(shutdownCtx); err != nil {
 			log.Error("HTTP server shutdown failed: " + err.Error())
 		} else {
 			log.Info("HTTP server shutdown gracefully")
 		}
-	}()
+	}(httpServer)
 
-	go func() {
+	go func(grpcServer *grpc.Server) {
 		defer wg.Done()
 		grpcServer.GracefulStop()
 		log.Info("gRPC server shutdown gracefully")
-	}()
+	}(grpcServer)
 
 	wg.Wait()
 }

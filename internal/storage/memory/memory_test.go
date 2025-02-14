@@ -3,9 +3,10 @@ package memory
 import (
 	"errors"
 	"fmt"
-	"go.uber.org/zap/zaptest"
 	"sync"
 	"testing"
+
+	"go.uber.org/zap/zaptest"
 
 	"url-shortener/internal/storage/errs"
 )

@@ -4,8 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"go.uber.org/zap"
-	"google.golang.org/grpc"
 	"net"
 	"net/http"
 	"os"
@@ -13,6 +11,9 @@ import (
 	"sync"
 	"syscall"
 	"time"
+
+	"go.uber.org/zap"
+	"google.golang.org/grpc"
 
 	"url-shortener/cmd/url-shortener/server/grpcserver"
 	"url-shortener/cmd/url-shortener/server/httpserver"

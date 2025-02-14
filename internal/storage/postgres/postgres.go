@@ -4,11 +4,12 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"github.com/lib/pq"
-	"go.uber.org/zap"
 	"time"
 	"url-shortener/internal/config"
 	"url-shortener/internal/storage/errs"
+
+	"github.com/lib/pq"
+	"go.uber.org/zap"
 )
 
 const maxRetries = 10

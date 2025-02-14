@@ -1,9 +1,10 @@
 package mvlogger
 
 import (
+	"time"
+
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"time"
 )
 
 func NewLoggerMiddleware(log *zap.Logger) gin.HandlerFunc {

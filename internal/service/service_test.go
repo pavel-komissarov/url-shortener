@@ -1,11 +1,13 @@
 package service
 
 import (
-	"go.uber.org/zap"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"go.uber.org/zap"
+
 	"url-shortener/internal/storage/memory"
+
+	"github.com/stretchr/testify/assert"
 )
 
 const (

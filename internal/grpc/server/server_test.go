@@ -2,9 +2,10 @@ package server
 
 import (
 	"context"
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap"
-	"testing"
 
 	"url-shortener/internal/grpc/urlshortener"
 	"url-shortener/internal/service"

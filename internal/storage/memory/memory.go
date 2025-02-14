@@ -1,8 +1,9 @@
 package memory
 
 import (
-	"go.uber.org/zap"
 	"sync"
+
+	"go.uber.org/zap"
 
 	"url-shortener/internal/storage/errs"
 )

@@ -1,9 +1,10 @@
 package httpserver
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"net/http"
 
 	"url-shortener/internal/config"
 	"url-shortener/internal/http/handlers/resolve"

@@ -58,13 +58,16 @@
     - Общий уровень качества кода.
 
 ## Решение
+
 ### Конфигурация
 
 Настройки сервиса хранятся в файле `config/config.yml`, где указываются порты и сопутствующие параметры. По умолчанию:
+
 - HTTP-сервер работает на порту **8080**
 - gRPC-сервер работает на порту **50051**
 
 #### Пример конфигурации
+
 ```yaml
 server:
   http_port: ":8080"
@@ -88,6 +91,7 @@ log:
 ### Как работает In-Memory хранилище
 
 In-Memory хранилище реализовано в пакете `memory`. Оно использует два `map` для хранения данных:
+
 - `storage` для хранения соответствия `shortURL -> originalURL`
 - `reverse` для хранения обратного соответствия `originalURL -> shortURL`
 
@@ -95,7 +99,8 @@ In-Memory хранилище реализовано в пакете `memory`. О
 
 При добавлении нового URL выполняется проверка на существование, после чего данные записываются в обе карты с блокировкой `sync.RWMutex` для потокобезопасности.
 
-#### Пример кода:
+#### Пример кода
+
 ```go
 func (s *StorageInMemory) Put(url, shortURL string) error {
     s.rvMu.Lock()
@@ -116,7 +121,8 @@ func (s *StorageInMemory) Put(url, shortURL string) error {
 Генерация случайных коротких URL выполняется в пакете `random`.
 Используется криптографически безопасный генератор случайных чисел из пакета `crypto/rand`. Для генерации строки случайно выбираются символы из `alphabet`, содержащего буквы, цифры и `_`.
 
-#### Пример кода:
+#### Пример кода
+
 ```go
 func NewRandomString(stringLength int) (string, error) {
     if stringLength <= 0 {
@@ -142,10 +148,13 @@ func NewRandomString(stringLength int) (string, error) {
 #### HTTP
 
 ##### Сокращение ссылки
+
 **Запрос:**
+
 - **Метод:** `POST`
 - **Эндпоинт:** `/shorten`
 - **Тело запроса (JSON):**
+
   ```json
   {
     "url": "https://example.com"
@@ -153,21 +162,27 @@ func NewRandomString(stringLength int) (string, error) {
   ```
 
 **Ответ:**
+
 - **200 OK**
+
   ```json
   {
     "short_url": "example",
     "status": "OK"
   }
   ```
+
 - **500 Internal Server Error** (если URL уже существует)
+
   ```json
   {
     "error": "url already exists",
     "status": "Error"
   }
   ```
+
 - **400 Bad Request** (если URL невалидный)
+
   ```json
   {
     "error": "invalid URL format",
@@ -176,10 +191,13 @@ func NewRandomString(stringLength int) (string, error) {
   ```
 
 ##### Получение оригинальной ссылки
+
 **Запрос:**
+
 - **Метод:** `POST`
 - **Эндпоинт:** `/resolve`
 - **Тело запроса (JSON):**
+
   ```json
   {
     "short_url": "example"
@@ -187,14 +205,18 @@ func NewRandomString(stringLength int) (string, error) {
   ```
 
 **Ответ:**
+
 - **200 OK**
+
   ```json
   {
     "original_url": "https://example.com",
     "status": "OK"
   }
   ```
+
 - **404 Not Found** (если ссылка не найдена)
+
   ```json
   {
     "error": "URL not found",
@@ -203,6 +225,7 @@ func NewRandomString(stringLength int) (string, error) {
   ```
 
 #### gRPC
+
 Файл спецификации: `proto/urlshortener.proto`
 
 ```protobuf
@@ -237,10 +260,13 @@ message ResolveResponse {
 ### Тестирование
 
 Функционал сервиса покрыт юнит-тестами. Для запуска тестов:
+
 ```sh
 go test -v ./...
 ```
+
 Покрытие:
+
 ```sh
         url-shortener/cmd/url-shortener         coverage: 0.0% of statements
         url-shortener/cmd/url-shortener/server/httpserver               coverage: 0.0% of statements

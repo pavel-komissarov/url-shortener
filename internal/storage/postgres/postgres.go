@@ -1,6 +1,7 @@
 package postgres
 
 import (
+	"context"
 	"database/sql"
 	"errors"
 	"fmt"
@@ -66,7 +67,9 @@ func NewStorage(postgresConf config.PostgresConfig, log *zap.Logger) (*Storage, 
 }
 
 func (s *Storage) Put(url, shortURL string) error {
-	tx, err := s.db.Begin()
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	tx, err := s.db.BeginTx(ctx, &sql.TxOptions{Isolation: sql.LevelSerializable})
 	if err != nil {
 		return fmt.Errorf("error starting transaction: %w", err)
 	}
@@ -93,7 +96,9 @@ func (s *Storage) Put(url, shortURL string) error {
 }
 
 func (s *Storage) Get(shortURL string) (string, error) {
-	tx, err := s.db.Begin()
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	tx, err := s.db.BeginTx(ctx, &sql.TxOptions{Isolation: sql.LevelSerializable})
 	if err != nil {
 		return "", fmt.Errorf("error starting transaction: %w", err)
 	}
